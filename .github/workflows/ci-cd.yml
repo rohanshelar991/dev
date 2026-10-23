@@ -1,0 +1,63 @@
+name: Login Demo CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Test application
+        run: python -m unittest discover -s tests -v
+
+      - name: Package application
+        run: |
+          mkdir -p dist
+          cp app/index.html dist/index.html
+          cd app
+          zip -r ../dist/login-demo.zip index.html
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: login-demo-package
+          path: dist/login-demo.zip
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build-test-package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: app
+
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4

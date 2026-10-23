@@ -79,3 +79,16 @@ To demonstrate source-code management using Git and GitHub.
 
 ## Result
 Successfully demonstrated Git initialization, version control, commits, branching, pushing, and merging.
+
+## Q3 — CI/CD Using GitHub Actions
+
+A sample login demonstration page is included in the app directory.
+
+The GitHub Actions workflow (.github/workflows/ci-cd.yml):
+1. Checks out the repository.
+2. Sets up Python.
+3. Runs automated unit tests.
+4. Packages the application as a ZIP artifact.
+5. Deploys the static website to GitHub Pages after successful tests.
+
+The login page is a demonstration only and does not implement real authentication.
