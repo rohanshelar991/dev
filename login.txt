@@ -1,1 +1,3 @@
-Login feature added
+Login Feature
+
+This sample file demonstrates feature development using Git branching, commits, and merging.
